@@ -1,37 +1,36 @@
 package com.example.task.controller
+
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import com.example.task.model.category
 import com.example.task.model.status
-import org.springframework.scheduling.config.Task
 import org.springframework.web.bind.annotation.*
-import com.example.task.model.taskModel
-
+import com.example.task.model.TaskModel
 
 
 @RestController
 @RequestMapping("/api/tasks")
 class TaskController {
-    private val tasks = mutableListOf<taskModel>()
+    private val tasks = mutableListOf<TaskModel>()
 
     @GetMapping
-    fun getAllTasks(): MutableList<taskModel> {
+    fun getAllTasks(): MutableList<TaskModel> {
         return tasks
     }
 
     @PostMapping("/add")
-    fun addTask(@RequestBody task: taskModel){
+    fun addTask(@RequestBody task: TaskModel) {
         tasks.add(task)
     }
 
     @GetMapping("/{id}")
-    fun getTaskById(@PathVariable id: Long): taskModel? {
+    fun getTaskById(@PathVariable id: Long): TaskModel? {
         return tasks.find { it.id == id }
     }
 
     @GetMapping("/name/{name}")
-    fun getTaskByName(@PathVariable name: String): List<taskModel> {
+    fun getTaskByName(@PathVariable name: String): List<TaskModel> {
         return tasks.filter {
             it.title.equals(name, ignoreCase = true)
         }
@@ -41,9 +40,9 @@ class TaskController {
     fun updateTask(
         @PathVariable id:
         Long, @RequestBody updatedTask:
-        taskModel
+        TaskModel
     ) {
-        val task: taskModel? = tasks.find { it.id == id }
+        val task: TaskModel? = tasks.find { it.id == id }
         task?.let {
             it.title = updatedTask.title
             it.description = updatedTask.description
