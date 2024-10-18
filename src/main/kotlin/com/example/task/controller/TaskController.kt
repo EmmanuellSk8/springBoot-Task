@@ -41,32 +41,34 @@ class TaskController {
         if (name.isNullOrEmpty()) {
             throw TaskNotFound("La tarea con el nombre $name no ha sido encontrada")
         }
-        return tasks.filter {
-            it.title.equals(name, ignoreCase = true)
+        val listName = tasks.filter { it.title.equals(name, true) }
+
+        if (listName.isEmpty()) {
+            throw TaskNotFound("La tarea con el nombre $name no ha sido encontrada")
         }
+        return listName
     }
 
 
-    @GetMapping("/category/{category}")
-    fun getTaskByCategory(@RequestParam category: String): List<TaskModel> {
-        val listCategory =
-            tasks.filter {
-                it.category.name.equals(category, true)
-            }
+    @GetMapping("/category")
+    fun getTaskByCategory(@RequestParam category: String?): List<TaskModel> {
         if (category.isNullOrEmpty()) {
             throw TaskNotFound("La tarea en la categoría $category no fue encontrada")
-
         }
+
+        val listCategory = tasks.filter {
+            it.category.name.equals(category, true)
+        }
+        if (listCategory.isEmpty()) {
+            throw TaskNotFound("La tarea en la categoría $category no fue encontrada")
+        }
+
         return listCategory
     }
 
 
     @PutMapping("/{id}")
-    fun updateTask(
-        @PathVariable id:
-        Long, @RequestBody updatedTask:
-        TaskModel
-    ) {
+    fun updateTask(@PathVariable id: Long, @RequestBody updatedTask: TaskModel) {
         val task: TaskModel? =
             tasks.find { it.id == id } ?: throw TaskNotFound("No se pudo encontrar la tarea con el id $id")
         task?.let {
