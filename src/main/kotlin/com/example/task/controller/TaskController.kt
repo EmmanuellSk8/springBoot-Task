@@ -39,7 +39,7 @@ class TaskController {
     @GetMapping("/name/{name}")
     fun getTaskByName(@PathVariable name: String): List<TaskModel> {
         if (name.isNullOrEmpty()) {
-            throw TaskNotFound("La tarea con el nombre $name no ha sido encontrada")
+            throw TaskNotFound("El nombre no puede estar vacío")
         }
         val listName = tasks.filter { it.title.equals(name, true) }
 
@@ -53,7 +53,7 @@ class TaskController {
     @GetMapping("/category")
     fun getTaskByCategory(@RequestParam category: String?): List<TaskModel> {
         if (category.isNullOrEmpty()) {
-            throw TaskNotFound("La tarea en la categoría $category no fue encontrada")
+            throw TaskNotFound("La categoría no puede estar vacía")
         }
 
         val listCategory = tasks.filter {
